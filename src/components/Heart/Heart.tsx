@@ -1,15 +1,21 @@
+// src/components/Heart/Heart.tsx
 import { useState, useRef } from "react";
-import "./HeartSlider.css"; // Import your CSS file for styles
+import "./HeartSlider.css"; // Giả định CSS gốc vẫn được giữ
 
-const HeartSlider = () => {
+interface HeartSliderProps {
+  onChange?: (value: number) => void; // Thêm prop onChange để gửi giá trị ra ngoài
+}
+
+const HeartSlider = ({ onChange }: HeartSliderProps) => {
   const [value, setValue] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const animations = ["float-1", "float-2", "float-3", "float-4"];
   const animationDuration = 2000;
 
-  const handleInput = (e: any) => {
-    const newValue = e.target.value;
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(e.target.value);
     setValue(newValue);
+    if (onChange) onChange(newValue); // Gửi giá trị ra ngoài qua prop onChange
 
     const randomAnimation =
       animations[Math.floor(Math.random() * animations.length)];
@@ -34,7 +40,7 @@ const HeartSlider = () => {
   };
 
   return (
-    <>
+    <div className="slider-container">
       <div className="slider container" ref={containerRef}>
         <input
           type="range"
@@ -45,7 +51,8 @@ const HeartSlider = () => {
           onChange={handleInput}
         />
       </div>
-    </>
+      <span className="value-display">{value}%</span>
+    </div>
   );
 };
 

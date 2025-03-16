@@ -1,23 +1,33 @@
+// src/pages/Thankyou.tsx
 import Layout from "../layouts/layout";
 import img1 from "../assets/img/happy-cat.gif";
-import { FaHeart, FaStar, FaRibbon } from "react-icons/fa"; // Import icons from react-icons
+import { FaHeart, FaStar, FaRibbon } from "react-icons/fa";
 import "../components/styles/Thankyou.css";
 import { useEffect, useState } from "react";
 
 const Thankyou = () => {
   const [dateTime, setDateTime] = useState({ date: "", time: "" });
+  const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
+  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
+  const [excitementRate, setExcitementRate] = useState<string>("");
 
   useEffect(() => {
-    // Retrieve and parse the date and time from localStorage
+    // Lấy dữ liệu từ localStorage
     const storedDateTime = localStorage.getItem("dateTime");
-    if (storedDateTime) {
-      setDateTime(JSON.parse(storedDateTime));
-    }
+    const storedFoods = localStorage.getItem("selectedFoods");
+    const storedMovies = localStorage.getItem("selectedMovies");
+    const storedRate = localStorage.getItem("excitementRate");
 
+    if (storedDateTime) setDateTime(JSON.parse(storedDateTime));
+    if (storedFoods) setSelectedFoods(JSON.parse(storedFoods));
+    if (storedMovies) setSelectedMovies(JSON.parse(storedMovies));
+    if (storedRate) setExcitementRate(storedRate);
+
+    // Định vị ngẫu nhiên các biểu tượng
     const icons = document.querySelectorAll(".icon-random");
     icons.forEach((icon) => {
-      const randomTop = Math.floor(Math.random() * 80); // Random top percentage
-      const randomLeft = Math.floor(Math.random() * 80); // Random left percentage
+      const randomTop = Math.floor(Math.random() * 80);
+      const randomLeft = Math.floor(Math.random() * 80);
       (icon as HTMLElement).style.top = `${randomTop}%`;
       (icon as HTMLElement).style.left = `${randomLeft}%`;
     });
@@ -48,6 +58,21 @@ const Thankyou = () => {
         {dateTime.date && dateTime.time && (
           <h1 className="thankyou-text">
             Don't forget on {dateTime.date} at {dateTime.time}
+          </h1>
+        )}
+        {selectedFoods.length > 0 && (
+          <h1 className="thankyou-text">
+            We'll enjoy: {selectedFoods.join(", ")}
+          </h1>
+        )}
+        {selectedMovies.length > 0 && (
+          <h1 className="thankyou-text">
+            We'll watch: {selectedMovies.join(", ")}
+          </h1>
+        )}
+        {excitementRate && (
+          <h1 className="thankyou-text">
+            Excitement level: {excitementRate}%
           </h1>
         )}
         <div className="icon-container-bottom">
